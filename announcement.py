@@ -24,19 +24,6 @@ class Bh3Announcement(Announcement):
 
         return Model.model_validate(response_data)
 
-    def get_version_info(self):
-        data = self.get_list()
-        for lst in data.data.list:
-            for i in lst.list:
-                if "游戏更新内容问题修复及优化说明" in i.title:
-                    return i
-
-    def get_gacha_info(self):
-        for i in self.get_list().data.list:
-            for j in i.list:
-                if j.title.split("丨").pop(0).endswith("补给"):
-                    yield j
-
 
 class Hk4eAnnouncement(Announcement):
     def get_list(self):
@@ -47,19 +34,6 @@ class Hk4eAnnouncement(Announcement):
 
         return Model.model_validate(response_data)
 
-    def get_version_info(self):
-        data = self.get_list()
-        for lst in data.data.list:
-            for i in lst.list:
-                if "游戏更新修复与优化说明" in i.title:
-                    return i
-
-    def get_gacha_info(self):
-        for i in self.get_list().data.list:
-            for j in i.list:
-                if j.subtitle.endswith("祈愿"):
-                    yield j
-
 
 class HkrpgAnnouncement(Announcement):
     def get_list(self):
@@ -69,16 +43,3 @@ class HkrpgAnnouncement(Announcement):
         from models.hkrpg.list import Model
 
         return Model.model_validate(response_data)
-
-    def get_version_info(self):
-        data = self.get_list()
-        for lst in data.data.list:
-            for i in lst.list:
-                if "游戏优化及已知问题说明" in i.title:
-                    return i
-
-    def get_gacha_info(self):
-        for i in self.get_list().data.pic_list:
-            for j in i.type_list[0].list:
-                if j.title.split("：").pop(0).endswith("跃迁"):
-                    yield j

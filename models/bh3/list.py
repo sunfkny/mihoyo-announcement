@@ -62,3 +62,17 @@ class Model(BaseModel):
     retcode: int
     message: str
     data: Data
+
+    def get_version_info(self):
+        for lst in self.data.list:
+            for i in lst.list:
+                if "游戏更新内容问题修复及优化说明" in i.title:
+                    return i
+
+    def get_gacha_info(self):
+        data: List[ListItem1] = []
+        for i in self.data.list:
+            for j in i.list:
+                if j.title.split("丨").pop(0).endswith("补给"):
+                    data.append(j)
+        return data

@@ -108,3 +108,17 @@ class Model(BaseModel):
     retcode: int
     message: str
     data: Data
+
+    def get_version_info(self):
+        for lst in self.data.list:
+            for i in lst.list:
+                if "游戏优化及已知问题说明" in i.title:
+                    return i
+
+    def get_gacha_info(self):
+        data: List[ListItem2] = []
+        for i in self.data.pic_list:
+            for j in i.type_list[0].list:
+                if j.title.split("：").pop(0).endswith("跃迁"):
+                    yield j
+        return data
