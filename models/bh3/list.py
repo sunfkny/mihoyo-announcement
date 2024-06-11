@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 from typing import List
 
 from pydantic import BaseModel
@@ -16,8 +17,8 @@ class ListItem1(BaseModel):
     tag_icon: str
     login_alert: int
     lang: str
-    start_time: str
-    end_time: str
+    start_time: datetime.datetime
+    end_time: datetime.datetime
     type: int
     remind: int
     alert: int

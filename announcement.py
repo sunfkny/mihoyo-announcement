@@ -24,12 +24,12 @@ class Bh3Announcement(Announcement):
 
         return Model.model_validate(response_data)
 
-    def get_version_end_time(self):
+    def get_version_info(self):
         data = self.get_list()
         for lst in data.data.list:
             for i in lst.list:
                 if "游戏更新内容问题修复及优化说明" in i.title:
-                    return i.end_time
+                    return i
 
     def get_gacha_info(self):
         for i in self.get_list().data.list:
@@ -47,12 +47,12 @@ class Hk4eAnnouncement(Announcement):
 
         return Model.model_validate(response_data)
 
-    def get_version_end_time(self):
+    def get_version_info(self):
         data = self.get_list()
         for lst in data.data.list:
             for i in lst.list:
                 if "游戏更新修复与优化说明" in i.title:
-                    return i.end_time
+                    return i
 
     def get_gacha_info(self):
         for i in self.get_list().data.list:
@@ -70,12 +70,12 @@ class HkrpgAnnouncement(Announcement):
 
         return Model.model_validate(response_data)
 
-    def get_version_end_time(self):
+    def get_version_info(self):
         data = self.get_list()
         for lst in data.data.list:
             for i in lst.list:
                 if "游戏优化及已知问题说明" in i.title:
-                    return i.end_time
+                    return i
 
     def get_gacha_info(self):
         for i in self.get_list().data.pic_list:
