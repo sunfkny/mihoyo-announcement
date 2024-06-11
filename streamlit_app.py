@@ -1,29 +1,38 @@
-from announcement import Bh3Announcement, Hk4eAnnouncement, HkrpgAnnouncement
-import streamlit as st
 import datetime
+from typing import Callable
+
+import arrow
+import streamlit as st
+
+from announcement import Bh3Announcement, Hk4eAnnouncement, HkrpgAnnouncement
+from models.bh3 import list as bh3_list
+from models.hk4e import list as hk4e_list
+from models.hkrpg import list as hkrpg_list
 
 api_ttl = 10
 
 
 @st.cache_resource(ttl=api_ttl)
-def get_bh3_list():
-    return Bh3Announcement().get_list()
+def get_bh3_ann_list():
+    return Bh3Announcement().get_ann_list()
 
 
 @st.cache_resource(ttl=api_ttl)
-def get_hk4e_list():
-    return Hk4eAnnouncement().get_list()
+def get_hk4e_ann_list():
+    return Hk4eAnnouncement().get_ann_list()
 
 
 @st.cache_resource(ttl=api_ttl)
-def get_hkrpg_list():
-    return HkrpgAnnouncement().get_list()
+def get_hkrpg_ann_list():
+    return HkrpgAnnouncement().get_ann_list()
 
 
-current_time = datetime.datetime.now()
+current_time = arrow.now()
 
 
-def get_humanize(dt: datetime.datetime):
+def get_humanize(end_time: datetime.datetime, timezone: int):
+    tzinfo = arrow.parser.TzinfoParser.parse(f"{timezone:>02}")
+    dt = arrow.get(end_time, tzinfo=tzinfo)
     if dt < current_time:
         return "已结束"
     diff = dt - current_time
@@ -36,58 +45,45 @@ def get_humanize(dt: datetime.datetime):
 def calculate_progress_percentage(
     start_time: datetime.datetime,
     end_time: datetime.datetime,
-    current_time: datetime.datetime,
+    timezone: int,
 ):
+    tzinfo = arrow.parser.TzinfoParser.parse(f"{timezone:>02}")
+    current_time_naive = current_time.to(tzinfo).naive
     if start_time > end_time:
         start_time, end_time = end_time, start_time
-    if current_time < start_time:
+    if current_time_naive < start_time:
         return 0
-    if current_time > end_time:
+    if current_time_naive > end_time:
         return 100
     diff = end_time - start_time
     total_seconds = diff.total_seconds()
-    elapsed_seconds = (current_time - start_time).total_seconds()
+    elapsed_seconds = (current_time_naive - start_time).total_seconds()
     return int(elapsed_seconds / total_seconds * 100)
 
 
-st.title("崩坏3")
-bh3_version_info = get_bh3_list().get_version_info()
-if bh3_version_info is not None:
-    st.caption(f"{bh3_version_info.start_time} ~ {bh3_version_info.end_time}")
-    st.progress(
-        calculate_progress_percentage(
-            start_time=bh3_version_info.start_time,
-            end_time=bh3_version_info.end_time,
-            current_time=current_time,
-        )
-    )
-for i in get_bh3_list().get_gacha_info():
-    st.image(i.banner, caption=f"{i.title} {get_humanize(i.end_time)}")
+GameListModel = bh3_list.Model | hk4e_list.Model | hkrpg_list.Model
+games: dict[str, Callable[[], GameListModel]] = {
+    "崩坏3": get_bh3_ann_list,
+    "原神": get_hk4e_ann_list,
+    "崩坏：星穹铁道": get_hkrpg_ann_list,
+}
 
-st.title("原神")
-hk4e_version_info = get_hk4e_list().get_version_info()
-if hk4e_version_info is not None:
-    st.caption(f"{hk4e_version_info.start_time} ~ {hk4e_version_info.end_time}")
-    st.progress(
-        calculate_progress_percentage(
-            start_time=hk4e_version_info.start_time,
-            end_time=hk4e_version_info.end_time,
-            current_time=current_time,
+for game_name, get_list in games.items():
+    st.title(game_name)
+    lst = get_list()
+    version_info = lst.get_version_info()
+    gacha_info = lst.get_gacha_info()
+    timezone = get_list().data.timezone
+    if version_info is not None:
+        st.caption(f"{version_info.start_time} ~ {version_info.end_time}")
+        st.progress(
+            calculate_progress_percentage(
+                start_time=version_info.start_time,
+                end_time=version_info.end_time,
+                timezone=timezone,
+            )
         )
-    )
-for i in get_hk4e_list().get_gacha_info():
-    st.image(i.banner, caption=f"{i.title} {get_humanize(i.end_time)}")
-
-st.title("崩坏：星穹铁道")
-hkrpg_version_info = get_hkrpg_list().get_version_info()
-if hkrpg_version_info is not None:
-    st.caption(f"{hkrpg_version_info.start_time} ~ {hkrpg_version_info.end_time}")
-    st.progress(
-        calculate_progress_percentage(
-            start_time=hkrpg_version_info.start_time,
-            end_time=hkrpg_version_info.end_time,
-            current_time=current_time,
-        )
-    )
-for i in get_hkrpg_list().get_gacha_info():
-    st.image(i.img, caption=f"{i.title} {get_humanize(i.end_time)}")
+    for i in gacha_info:
+        end_time_humanize = get_humanize(end_time=i.end_time, timezone=timezone)
+        image = i.img if isinstance(i, hkrpg_list.ListItem2) else i.banner
+        st.image(image=image, caption=f"{i.title} {end_time_humanize}")
