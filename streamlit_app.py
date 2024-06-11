@@ -31,8 +31,7 @@ current_time = arrow.now()
 
 
 def get_humanize(end_time: datetime.datetime, timezone: int):
-    tzinfo = arrow.parser.TzinfoParser.parse(f"{timezone:>02}")
-    dt = arrow.get(end_time, tzinfo=tzinfo)
+    dt = arrow.get(end_time, tzinfo=f"UTC{timezone:+03d}")
     if dt < current_time:
         return "已结束"
     diff = dt - current_time
