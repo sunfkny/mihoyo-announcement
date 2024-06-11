@@ -70,17 +70,17 @@ games: dict[str, Callable[[], GameListModel]] = {
 for game_name, get_list in games.items():
     st.title(game_name)
     lst = get_list()
-    version_info = lst.get_version_info()
+    v = lst.get_version_info()
     timezone = get_list().data.timezone
-    if version_info is not None:
-        end_time_humanize = get_humanize(end_time=version_info.end_time, timezone=timezone)
+    if v is not None:
+        end_time_humanize = get_humanize(end_time=v.end_time, timezone=timezone)
         st.progress(
             value=calculate_progress_percentage(
-                start_time=version_info.start_time,
-                end_time=version_info.end_time,
+                start_time=v.start_time,
+                end_time=v.end_time,
                 timezone=timezone,
             ),
-            text=f"{version_info.start_time} ~ {version_info.end_time} （{end_time_humanize}）",
+            text=f"{v.start_time} ~ {v.end_time} （{end_time_humanize}）",
         )
     gacha_info = lst.get_gacha_info()
     for i in gacha_info:
