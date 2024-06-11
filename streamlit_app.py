@@ -1,40 +1,40 @@
-import altair as alt
-import numpy as np
-import pandas as pd
+from announcement import Bh3Announcement, Hk4eAnnouncement, HkrpgAnnouncement
 import streamlit as st
+import datetime
 
-"""
-# Welcome to Streamlit!
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:.
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
+@st.cache_resource
+def get_bh3_gacha_info():
+    return list(Bh3Announcement().get_gacha_info())
 
-In the meantime, below is an example of what you can do with just a few lines of code:
-"""
 
-num_points = st.slider("Number of points in spiral", 1, 10000, 1100)
-num_turns = st.slider("Number of turns in spiral", 1, 300, 31)
+@st.cache_resource
+def get_hk4e_gacha_info():
+    return list(Hk4eAnnouncement().get_gacha_info())
 
-indices = np.linspace(0, 1, num_points)
-theta = 2 * np.pi * num_turns * indices
-radius = indices
 
-x = radius * np.cos(theta)
-y = radius * np.sin(theta)
+@st.cache_resource
+def get_hkrpg_gacha_info():
+    return list(HkrpgAnnouncement().get_gacha_info())
 
-df = pd.DataFrame({
-    "x": x,
-    "y": y,
-    "idx": indices,
-    "rand": np.random.randn(num_points),
-})
 
-st.altair_chart(alt.Chart(df, height=700, width=700)
-    .mark_point(filled=True)
-    .encode(
-        x=alt.X("x", axis=None),
-        y=alt.Y("y", axis=None),
-        color=alt.Color("idx", legend=None, scale=alt.Scale()),
-        size=alt.Size("rand", legend=None, scale=alt.Scale(range=[1, 150])),
-    ))
+def get_humanize(dt):
+    # return arrow.get(dt).humanize(locale="zh", only_distance=True, granularity="day")
+    diff = datetime.datetime.fromisoformat(dt) - datetime.datetime.now().replace(microsecond=0)
+    days = diff.days
+    hours, remainder = divmod(diff.seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    return f"剩余 {days} 天 {hours} 小时 {minutes} 分钟"
+
+
+st.title("崩坏3")
+for i in get_bh3_gacha_info():
+    st.image(i.banner, caption=f"{i.title} - {get_humanize(i.end_time)}")
+
+st.title("原神")
+for i in get_hk4e_gacha_info():
+    st.image(i.banner, caption=f"{i.title} - {get_humanize(i.end_time)}")
+
+st.title("崩坏：星穹铁道")
+for i in get_hkrpg_gacha_info():
+    st.image(i.img, caption=f"{i.title} - {get_humanize(i.end_time)}")

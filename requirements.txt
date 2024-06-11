@@ -1,3 +1,4 @@
-altair
-pandas
+cachetools
+httpx
+pydantic
 streamlit
