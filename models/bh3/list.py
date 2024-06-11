@@ -73,6 +73,8 @@ class Model(BaseModel):
         data: List[ListItem1] = []
         for i in self.data.list:
             for j in i.list:
-                if j.title.split("丨").pop(0).endswith("补给"):
+                if j.title.startswith("天命武库"):
+                    data.append(j)
+                if j.title.split("丨")[0].endswith("补给"):
                     data.append(j)
         return data

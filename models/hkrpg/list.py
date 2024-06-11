@@ -120,6 +120,6 @@ class Model(BaseModel):
         for i in self.data.pic_list:
             for j in i.type_list:
                 for k in j.list:
-                    if k.title.split("：").pop(0).endswith("跃迁"):
+                    if k.title.split("：")[0].endswith("跃迁"):
                         data.append(k)
         return data
