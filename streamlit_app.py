@@ -71,18 +71,28 @@ for game_name, get_list in games.items():
     st.title(game_name)
     lst = get_list()
     version_info = lst.get_version_info()
-    gacha_info = lst.get_gacha_info()
     timezone = get_list().data.timezone
     if version_info is not None:
-        st.caption(f"{version_info.start_time} ~ {version_info.end_time}")
+        end_time_humanize = get_humanize(end_time=version_info.end_time, timezone=timezone)
         st.progress(
-            calculate_progress_percentage(
+            value=calculate_progress_percentage(
                 start_time=version_info.start_time,
                 end_time=version_info.end_time,
                 timezone=timezone,
-            )
+            ),
+            text=f"{version_info.start_time} ~ {version_info.end_time} （{end_time_humanize}）",
         )
+    gacha_info = lst.get_gacha_info()
     for i in gacha_info:
-        end_time_humanize = get_humanize(end_time=i.end_time, timezone=timezone)
-        image = i.img if isinstance(i, hkrpg_list.ListItem2) else i.banner
-        st.image(image=image, caption=f"{i.title} {end_time_humanize}")
+        with st.container(border=True):
+            image = i.img if isinstance(i, hkrpg_list.ListItem2) else i.banner
+            st.image(image=image, caption=i.title)
+            end_time_humanize = get_humanize(end_time=i.end_time, timezone=timezone)
+            st.progress(
+                value=calculate_progress_percentage(
+                    start_time=i.start_time,
+                    end_time=i.end_time,
+                    timezone=timezone,
+                ),
+                text=f"{i.start_time} ~ {i.end_time} （{end_time_humanize}）",
+            )
