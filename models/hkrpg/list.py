@@ -118,7 +118,8 @@ class Model(BaseModel):
     def get_gacha_info(self):
         data: List[ListItem2] = []
         for i in self.data.pic_list:
-            for j in i.type_list[0].list:
-                if j.title.split("：").pop(0).endswith("跃迁"):
-                    yield j
+            for j in i.type_list:
+                for k in j.list:
+                    if k.title.split("：").pop(0).endswith("跃迁"):
+                        data.append(k)
         return data
