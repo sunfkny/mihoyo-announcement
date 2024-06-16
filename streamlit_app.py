@@ -1,5 +1,5 @@
 import datetime
-from typing import Callable
+from collections.abc import Callable
 
 import arrow
 import streamlit as st
@@ -71,7 +71,7 @@ for game_name, get_list in games.items():
     st.title(game_name)
     lst = get_list()
     v = lst.get_version_info()
-    timezone = get_list().data.timezone
+    timezone = lst.data.timezone
     if v is not None:
         end_time_humanize = get_humanize(end_time=v.end_time, timezone=timezone)
         st.progress(
