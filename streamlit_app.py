@@ -72,7 +72,9 @@ for game_name, get_list in games.items():
     lst = get_list()
     v = lst.get_version_info()
     timezone = lst.data.timezone
-    if v is not None:
+    if v is None:
+        st.warning("未获取到版本信息")
+    else:
         end_time_humanize = get_humanize(end_time=v.end_time, timezone=timezone)
         st.progress(
             value=calculate_progress_percentage(
@@ -87,12 +89,20 @@ for game_name, get_list in games.items():
         with st.container(border=True):
             image = i.img if isinstance(i, hkrpg_list.ListItem2) else i.banner
             st.image(image=image, caption=i.title)
-            end_time_humanize = get_humanize(end_time=i.end_time, timezone=timezone)
-            st.progress(
-                value=calculate_progress_percentage(
-                    start_time=i.start_time,
-                    end_time=i.end_time,
-                    timezone=timezone,
-                ),
-                text=f"{i.start_time} ~ {i.end_time} （{end_time_humanize}）",
-            )
+
+            banner_is_preview = False
+            if v is not None:
+                banner_is_preview = v.end_time - i.start_time < datetime.timedelta(days=1)
+
+            if banner_is_preview:
+                st.caption(f"版本更新后 ~ {i.end_time}")
+            else:
+                end_time_humanize = get_humanize(end_time=i.end_time, timezone=timezone)
+                st.progress(
+                    value=calculate_progress_percentage(
+                        start_time=i.start_time,
+                        end_time=i.end_time,
+                        timezone=timezone,
+                    ),
+                    text=f"{i.start_time} ~ {i.end_time} （{end_time_humanize}）",
+                )
