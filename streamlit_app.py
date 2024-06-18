@@ -92,7 +92,7 @@ for game_name, get_list in games.items():
 
             banner_is_preview = False
             if v is not None:
-                banner_is_preview = v.end_time - i.start_time < datetime.timedelta(days=1)
+                banner_is_preview = datetime.timedelta() < v.end_time - i.start_time < datetime.timedelta(days=1)
 
             if banner_is_preview:
                 st.caption(f"版本更新后 ~ {i.end_time}")
