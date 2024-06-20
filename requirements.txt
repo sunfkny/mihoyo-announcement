@@ -2,3 +2,4 @@ streamlit
 httpx
 pydantic
 arrow
+bs4

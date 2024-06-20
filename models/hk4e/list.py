@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import datetime
-from typing import List
 
 from pydantic import BaseModel
 
@@ -31,7 +30,7 @@ class ListItem1(BaseModel):
 
 
 class ListItem(BaseModel):
-    list: List[ListItem1]
+    list: list[ListItem1]
     type_id: int
     type_label: str
 
@@ -43,16 +42,16 @@ class TypeListItem(BaseModel):
 
 
 class Data(BaseModel):
-    list: List[ListItem]
+    list: list[ListItem]
     total: int
-    type_list: List[TypeListItem]
+    type_list: list[TypeListItem]
     alert: bool
     alert_id: int
     timezone: int
     t: str
-    pic_list: List
+    pic_list: list
     pic_total: int
-    pic_type_list: List
+    pic_type_list: list
     pic_alert: bool
     pic_alert_id: int
     static_sign: str
@@ -70,7 +69,7 @@ class Model(BaseModel):
                     return i
 
     def get_gacha_info(self):
-        data: List[ListItem1] = []
+        data: list[ListItem1] = []
         for i in self.data.list:
             for j in i.list:
                 if j.subtitle.endswith("祈愿"):
