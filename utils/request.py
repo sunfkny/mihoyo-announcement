@@ -1,6 +1,8 @@
 import httpx
 
 client = httpx.Client()
+
+
 def request(url: str, params: dict | None = None) -> dict:
     response = client.get(url, params=params)
     response.raise_for_status()
