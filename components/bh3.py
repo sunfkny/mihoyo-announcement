@@ -75,13 +75,12 @@ def bh3():
         content_images = content_bs.find_all("img")
         content_text = content_bs.get_text()
 
-        with st.container(border=True):
-            st.image(image=i.image, caption=i.title)
-            for image in content_images:
-                st.image(image=image["src"])
-            if not content_images:
-                match_time = re.search(r"开放时间(.*?)开放等级", content_text, re.MULTILINE)
-                if match_time:
-                    st.text(match_time.group(1))
-                else:
-                    st.text_area("content", value=i.content)
+        st.image(image=i.image, caption=i.title)
+        for image in content_images:
+            st.image(image=image["src"])
+        if not content_images:
+            match_time = re.search(r"开放时间(.*?)开放等级", content_text, re.MULTILINE)
+            if match_time:
+                st.markdown(match_time.group(1))
+            else:
+                st.text_area("content", value=i.content)

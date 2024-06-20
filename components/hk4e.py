@@ -67,20 +67,19 @@ def hk4e():
             i.content,
             re.MULTILINE,
         )
-        with st.container(border=True):
-            st.image(image=i.image, caption=i.title)
-            match t.groups() if t else None:
-                case [start_str, None, end_time]:
-                    end_time = arrow.get(end_time).to("Asia/Shanghai")
-                    end_time_humanize = end_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
-                    st.text(f"开始时间：{start_str}")
-                    st.text(f"结束时间：{end_time:YYYY-MM-DD HH:mm:ss} （{end_time_humanize}）")
-                case [None, start_time, end_time]:
-                    start_time = arrow.get(start_time).to("Asia/Shanghai")
-                    end_time = arrow.get(end_time).to("Asia/Shanghai")
-                    start_time_humanize = start_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
-                    end_time_humanize = end_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
-                    st.text(f"开始时间：{start_time:YYYY-MM-DD HH:mm:ss} （{start_time_humanize}）")
-                    st.text(f"结束时间：{end_time:YYYY-MM-DD HH:mm:ss} （{end_time_humanize}）")
-                case _:
-                    st.text_area("content", value=i.content)
+        st.image(image=i.image, caption=i.title)
+        match t.groups() if t else None:
+            case [start_str, None, end_time]:
+                end_time = arrow.get(end_time).to("Asia/Shanghai")
+                end_time_humanize = end_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
+                st.markdown(f"开始时间：{start_str}")
+                st.markdown(f"结束时间：{end_time:YYYY-MM-DD HH:mm:ss} （{end_time_humanize}）")
+            case [None, start_time, end_time]:
+                start_time = arrow.get(start_time).to("Asia/Shanghai")
+                end_time = arrow.get(end_time).to("Asia/Shanghai")
+                start_time_humanize = start_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
+                end_time_humanize = end_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
+                st.markdown(f"开始时间：{start_time:YYYY-MM-DD HH:mm:ss} （{start_time_humanize}）")
+                st.markdown(f"结束时间：{end_time:YYYY-MM-DD HH:mm:ss} （{end_time_humanize}）")
+            case _:
+                st.text_area("content", value=i.content)
