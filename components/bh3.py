@@ -6,7 +6,7 @@ import streamlit as st
 
 import models.bh3.content
 import models.bh3.list
-from utils import cache_ttl, request
+from utils import cache_ttl, get_tzinfo, request
 
 
 @st.cache_data(ttl=cache_ttl)
@@ -61,14 +61,17 @@ def get_ann_content():
 def bh3():
     ann_list = get_ann_list()
     version_info = ann_list.get_version_info()
-    if version_info:
-        start_time = arrow.get(version_info.start_time).to("Asia/Shanghai")
-        end_time = arrow.get(version_info.end_time).to("Asia/Shanghai")
-        current_time = arrow.now("Asia/Shanghai")
-        if start_time <= current_time <= end_time:
-            percent = (current_time - start_time) / (end_time - start_time)
-            end_time_humanize = end_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
-            st.progress(percent, text=f"{start_time:YYYY-MM-DD HH:mm:ss} ~ {end_time:YYYY-MM-DD HH:mm:ss} （{end_time_humanize}结束）")
+    if not version_info:
+        st.warning("获取版本信息失败")
+        return
+    timezone = ann_list.data.timezone
+    start_time = arrow.get(version_info.start_time,get_tzinfo(timezone))
+    end_time = arrow.get(version_info.end_time,get_tzinfo(timezone))
+    current_time = arrow.now("Asia/Shanghai")
+    if start_time <= current_time <= end_time:
+        percent = (current_time - start_time) / (end_time - start_time)
+        end_time_humanize = end_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
+        st.progress(percent, text=f"{start_time:YYYY-MM-DD HH:mm:ss} ~ {end_time:YYYY-MM-DD HH:mm:ss} （{end_time_humanize}结束）")
     ann_content = get_ann_content()
     for i in ann_content.get_gacha_info():
         content_bs = bs4.BeautifulSoup(i.content, "html.parser")

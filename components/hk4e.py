@@ -5,7 +5,7 @@ import streamlit as st
 
 import models.hk4e.content
 import models.hk4e.list
-from utils import cache_ttl, request
+from utils import cache_ttl, get_tzinfo, request
 
 
 @st.cache_data(ttl=cache_ttl)
@@ -52,14 +52,17 @@ def get_ann_content():
 def hk4e():
     ann_list = get_ann_list()
     version_info = ann_list.get_version_info()
-    if version_info:
-        start_time = arrow.get(version_info.start_time).to("Asia/Shanghai")
-        end_time = arrow.get(version_info.end_time).to("Asia/Shanghai")
-        current_time = arrow.now("Asia/Shanghai")
-        if start_time <= current_time <= end_time:
-            percent = (current_time - start_time) / (end_time - start_time)
-            end_time_humanize = end_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
-            st.progress(percent, text=f"{start_time:YYYY-MM-DD HH:mm:ss} ~ {end_time:YYYY-MM-DD HH:mm:ss} （{end_time_humanize}结束）")
+    if not version_info:
+        st.warning("获取版本信息失败")
+        return
+    timezone = ann_list.data.timezone
+    start_time = arrow.get(version_info.start_time, tzinfo=get_tzinfo(timezone))
+    end_time = arrow.get(version_info.end_time, tzinfo=get_tzinfo(timezone))
+    current_time = arrow.now("Asia/Shanghai")
+    if start_time <= current_time <= end_time:
+        percent = (current_time - start_time) / (end_time - start_time)
+        end_time_humanize = end_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
+        st.progress(percent, text=f"{start_time:YYYY-MM-DD HH:mm:ss} ~ {end_time:YYYY-MM-DD HH:mm:ss} （{end_time_humanize}结束）")
     ann_content = get_ann_content()
     for i in ann_content.get_gacha_info():
         t = re.search(
@@ -70,13 +73,13 @@ def hk4e():
         st.image(image=i.image, caption=i.title)
         match t.groups() if t else None:
             case [start_str, None, end_time]:
-                end_time = arrow.get(end_time).to("Asia/Shanghai")
+                end_time = arrow.get(end_time, tzinfo=get_tzinfo(timezone))
                 end_time_humanize = end_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
                 st.markdown(f"开始时间：{start_str}")
                 st.markdown(f"结束时间：{end_time:YYYY-MM-DD HH:mm:ss} （{end_time_humanize}）")
             case [None, start_time, end_time]:
-                start_time = arrow.get(start_time).to("Asia/Shanghai")
-                end_time = arrow.get(end_time).to("Asia/Shanghai")
+                start_time = arrow.get(start_time, tzinfo=get_tzinfo(timezone))
+                end_time = arrow.get(end_time, tzinfo=get_tzinfo(timezone))
                 start_time_humanize = start_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
                 end_time_humanize = end_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
                 st.markdown(f"开始时间：{start_time:YYYY-MM-DD HH:mm:ss} （{start_time_humanize}）")
