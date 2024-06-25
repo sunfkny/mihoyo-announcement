@@ -1,5 +1,3 @@
-import re
-
 import arrow
 import bs4
 import streamlit as st
@@ -65,8 +63,8 @@ def bh3():
         st.warning("获取版本信息失败")
         return
     timezone = ann_list.data.timezone
-    start_time = arrow.get(version_info.start_time,get_tzinfo(timezone))
-    end_time = arrow.get(version_info.end_time,get_tzinfo(timezone))
+    start_time = arrow.get(version_info.start_time, get_tzinfo(timezone))
+    end_time = arrow.get(version_info.end_time, get_tzinfo(timezone))
     current_time = arrow.now("Asia/Shanghai")
     if start_time <= current_time <= end_time:
         percent = (current_time - start_time) / (end_time - start_time)
@@ -74,16 +72,16 @@ def bh3():
         st.progress(percent, text=f"{start_time:YYYY-MM-DD HH:mm:ss} ~ {end_time:YYYY-MM-DD HH:mm:ss} （{end_time_humanize}结束）")
     ann_content = get_ann_content()
     for i in ann_content.get_gacha_info():
-        content_bs = bs4.BeautifulSoup(i.content, "html.parser")
-        content_images = content_bs.find_all("img")
-        content_text = content_bs.get_text()
-
         st.image(image=i.image, caption=i.title)
-        for image in content_images:
-            st.image(image=image["src"])
-        if not content_images:
-            match_time = re.search(r"开放时间(.*?)开放等级", content_text, re.MULTILINE)
-            if match_time:
-                st.markdown(match_time.group(1))
-            else:
-                st.text_area("content", value=i.content)
+
+        content_soup = bs4.BeautifulSoup(i.content, "html.parser")
+        info_header_text = content_soup.find(string=["开放时间", "补给信息"])
+        info_header = info_header_text.parent if info_header_text else None
+        info_element = info_header.find_next_sibling() if info_header else None
+        if info_element and "活动期间内，以下所有装备均有一定概率获取；指定装备UP时间内，该装备的获取概率提升！" == info_element.text:
+            info_element = info_element.find_next_sibling()
+
+        if info_element is not None:
+            st.html(str(info_element))
+        else:
+            st.text_area("content", value=i.content)
