@@ -67,11 +67,3 @@ class Model(BaseModel):
             for i in lst.list:
                 if "游戏更新内容问题修复及优化说明" in i.title:
                     return i
-
-    def get_gacha_info(self):
-        data: list[ListItem1] = []
-        for i in self.data.list:
-            for j in i.list:
-                if any(j.title.startswith(f"{s}补给") for s in ["角色", "精准", "活动", "装备", "进阶"]):
-                    data.append(j)
-        return data

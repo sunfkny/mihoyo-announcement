@@ -59,3 +59,9 @@ class Model(BaseModel):
     retcode: int
     message: str
     data: Data
+
+    def get_version_info(self):
+        for lst in self.data.list:
+            for i in lst.list:
+                if "已知问题及游戏优化说明" in i.title:
+                    return i

@@ -113,12 +113,3 @@ class Model(BaseModel):
             for i in lst.list:
                 if "游戏优化及已知问题说明" in i.title:
                     return i
-
-    def get_gacha_info(self):
-        data: list[ListItem2] = []
-        for i in self.data.pic_list:
-            for j in i.type_list:
-                for k in j.list:
-                    if k.title.split("：")[0].endswith("跃迁"):
-                        data.append(k)
-        return data
