@@ -1,3 +1,5 @@
+import re
+
 import arrow
 import bs4
 import streamlit as st
@@ -64,22 +66,39 @@ def nap():
 
     ann_content = get_ann_content()
     for i in ann_content.get_gacha_info():
+        # 常驻频段
+        stable_channel = "「热门卡司」调频说明"
+        # 邦布频段
+        bangboo_channel = "「卓越搭档」调频说明"
+        # 永久频段
+        permanent_channel_list = [
+            stable_channel,
+            bangboo_channel,
+        ]
+        if i.subtitle in permanent_channel_list:
+            continue
+
         content_soup = bs4.BeautifulSoup(i.content, "html.parser")
         info_table_time = content_soup.select_one("table tr:nth-child(2) td")
-        text = info_table_time.text if info_table_time else None
-        if text:
-            st.image(image=i.banner, caption=i.subtitle)
-            st.markdown(text)
-        else:
-            # 常驻频段
-            stable_channel = "「热门卡司」调频说明"
-            # 邦布频段
-            bangboo_channel = "「卓越搭档」调频说明"
-            # 永久频段
-            permanent_channel_list = [
-                stable_channel,
-                bangboo_channel,
-            ]
-            if i.subtitle not in permanent_channel_list:
-                st.image(image=i.banner, caption=i.subtitle)
+        text = info_table_time.text if info_table_time else ""
+        t = re.search(
+            r"(?:(.*?后)|(.*?)（服务器时间）)~(.*?)（服务器时间）",
+            text,
+            re.MULTILINE,
+        )
+        st.image(image=i.banner, caption=i.subtitle)
+        match t.groups() if t else None:
+            case (start_str, None, end_time):
+                end_time = arrow.get(end_time, tzinfo=get_tzinfo(timezone))
+                end_time_humanize = end_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
+                st.markdown(f"开始时间：{start_str}")
+                st.markdown(f"结束时间：{end_time:YYYY-MM-DD HH:mm:ss} （{end_time_humanize}）")
+            case (None, start_time, end_time):
+                start_time = arrow.get(start_time, tzinfo=get_tzinfo(timezone))
+                end_time = arrow.get(end_time, tzinfo=get_tzinfo(timezone))
+                start_time_humanize = start_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
+                end_time_humanize = end_time.humanize(locale="zh", granularity=["day", "hour", "minute"])
+                st.markdown(f"开始时间：{start_time:YYYY-MM-DD HH:mm:ss} （{start_time_humanize}）")
+                st.markdown(f"结束时间：{end_time:YYYY-MM-DD HH:mm:ss} （{end_time_humanize}）")
+            case _:
                 st.text_area("content", value=i.content)
