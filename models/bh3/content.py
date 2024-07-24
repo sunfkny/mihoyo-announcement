@@ -34,4 +34,4 @@ class Model(BaseModel):
                 return i
 
     def get_gacha_info(self):
-        return [i for i in self.data.list if "补给" in i.subtitle]
+        return [i for i in self.data.list if "补给" in i.subtitle or "补给限时开启" in i.content]
