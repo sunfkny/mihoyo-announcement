@@ -113,3 +113,5 @@ class Model(BaseModel):
             for i in lst.list:
                 if "游戏优化及已知问题说明" in i.title:
                     return i
+                if i.tag_label == "修复/更新":
+                    return i
