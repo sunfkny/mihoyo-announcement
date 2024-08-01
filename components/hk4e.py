@@ -1,6 +1,7 @@
 import re
 
 import arrow
+import bs4
 import streamlit as st
 
 import models.hk4e.content
@@ -67,7 +68,7 @@ def hk4e():
     ann_content = get_ann_content()
     for i in ann_content.get_gacha_info():
         t = re.search(
-            r'(?:([0-9]+\.[0-9]版本更新后)|&lt;t class="t_\w+"&gt;(.*?)&lt;\/t&gt;).*?&lt;t class="t_\w+"&gt;(.*?)&lt;\/t&gt;',
+            r'(?:([0-9]+\.[0-9]版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)',
             i.content,
             re.MULTILINE,
         )
