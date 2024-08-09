@@ -65,5 +65,5 @@ class Model(BaseModel):
     def get_version_info(self):
         for lst in self.data.list:
             for i in lst.list:
-                if "游戏更新内容问题修复及优化说明" in i.title:
+                if "游戏更新内容问题修复及优化说明" in i.title or "游戏更新内容公告" in i.subtitle:
                     return i

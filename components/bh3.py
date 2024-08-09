@@ -10,46 +10,35 @@ from utils import cache_ttl, get_tzinfo, request
 @st.cache_data(ttl=cache_ttl)
 def get_ann_list():
     response_data = request(
-        "https://api-takumi.mihoyo.com/common/bh3_cn/announcement/api/getAnnList",
+        "https://ann-api.mihoyo.com/common/bh3_cn/announcement/api/getAnnList",
         {
-            "auth_appid": "announcement",
-            "authkey_ver": "1",
-            "bundle_id": "bh3_cn",
-            "channel_id": "14",
             "game": "bh3",
             "game_biz": "bh3_cn",
             "lang": "zh-cn",
+            "bundle_id": "bh3_cn",
+            "channel_id": "14",
             "level": "88",
             "platform": "pc",
             "region": "bb01",
-            "sdk_presentation_style": "fullscreen",
-            "sdk_screen_transparent": "true",
-            "sign_type": "2",
             "uid": "100000000",
         },
     )
-
     return models.bh3.list.Model.model_validate(response_data)
 
 
 @st.cache_data(ttl=cache_ttl)
 def get_ann_content():
     response_data = request(
-        "https://api-takumi.mihoyo.com/common/bh3_cn/announcement/api/getAnnContent",
+        "https://ann-static.mihoyo.com/common/bh3_cn/announcement/api/getAnnContent",
         {
-            "auth_appid": "announcement",
-            "authkey_ver": "1",
-            "bundle_id": "bh3_cn",
-            "channel_id": "14",
             "game": "bh3",
             "game_biz": "bh3_cn",
             "lang": "zh-cn",
+            "bundle_id": "bh3_cn",
+            "channel_id": "14",
             "level": "88",
             "platform": "pc",
             "region": "bb01",
-            "sdk_presentation_style": "fullscreen",
-            "sdk_screen_transparent": "true",
-            "sign_type": "2",
             "uid": "100000000",
         },
     )
