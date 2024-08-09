@@ -49,10 +49,5 @@ class Model(BaseModel):
     message: str
     data: Data
 
-    def get_version_info(self):
-        for i in self.data.list:
-            if "游戏优化及已知问题说明" in i.title:
-                return i
-
     def get_gacha_info(self):
-        return [i for i in self.data.pic_list if i.title.split("：")[0].endswith("跃迁")]
+        return [i for i in self.data.pic_list if "跃迁" in i.title]

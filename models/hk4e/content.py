@@ -28,10 +28,5 @@ class Model(BaseModel):
     message: str
     data: Data
 
-    def get_version_info(self):
-        for i in self.data.list:
-            if "游戏更新修复与优化说明" in i.title:
-                return i
-
     def get_gacha_info(self):
         return [i for i in self.data.list if i.subtitle.endswith("祈愿")]
