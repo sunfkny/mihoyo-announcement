@@ -67,3 +67,5 @@ class Model(BaseModel):
             for i in lst.list:
                 if "游戏更新修复与优化说明" in i.title:
                     return i
+                if i.subtitle.endswith("版本更新说明"):
+                    return i
