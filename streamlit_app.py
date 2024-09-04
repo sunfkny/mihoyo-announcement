@@ -1,9 +1,9 @@
 import streamlit as st
 
-from components.bh3 import bh3
-from components.hk4e import hk4e
-from components.hkrpg import hkrpg
-from components.nap import nap
+from api.components.bh3 import bh3
+from api.components.hk4e import hk4e
+from api.components.hkrpg import hkrpg
+from api.components.nap import nap
 
 with st.expander("崩坏3", expanded=False):
     bh3()

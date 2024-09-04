@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import datetime
+
 from pydantic import BaseModel
 
 
@@ -14,8 +16,8 @@ class ListItem1(BaseModel):
     tag_icon: str
     login_alert: int
     lang: str
-    start_time: str
-    end_time: str
+    start_time: datetime.datetime
+    end_time: datetime.datetime
     type: int
     remind: int
     alert: int
@@ -63,5 +65,5 @@ class Model(BaseModel):
     def get_version_info(self):
         for lst in self.data.list:
             for i in lst.list:
-                if "已知问题及游戏优化说明" in i.title:
+                if "游戏更新内容问题修复及优化说明" in i.title or "游戏更新内容公告" in i.subtitle:
                     return i

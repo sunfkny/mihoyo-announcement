@@ -1,7 +1,16 @@
+[project]
+name = "mihoyo-announcement"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["streamlit", "httpx", "pydantic", "arrow", "beautifulsoup4"]
+
+[tool.ruff]
 line-length = 160
 target-version = "py310"
 
-[lint]
+[tool.ruff.lint]
 extend-select = [
     "A",    # https://docs.astral.sh/ruff/rules/#flake8-builtins-a
     "B006", #https://docs.astral.sh/ruff/rules/mutable-argument-default/
@@ -13,3 +22,6 @@ ignore = [
     "F401", # https://docs.astral.sh/ruff/rules/unused-import/
     "E402", # https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file/
 ]
+
+[tool.uv]
+package = false
