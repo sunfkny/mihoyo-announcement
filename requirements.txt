@@ -2,4 +2,8 @@ streamlit
 httpx
 pydantic
 arrow
-bs4
+beautifulsoup4
+fastapi
+uvicorn
+loguru
+aiocache
