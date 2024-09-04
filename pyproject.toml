@@ -1,10 +1,20 @@
 [project]
-name = "mihoyo-announcement"
+name = "api"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = ["streamlit", "httpx", "pydantic", "arrow", "beautifulsoup4"]
+dependencies = [
+    "streamlit",
+    "httpx",
+    "pydantic",
+    "arrow",
+    "beautifulsoup4",
+    "fastapi",
+    "uvicorn>=0.30.6",
+    "loguru>=0.7.2",
+    "aiocache>=0.12.2",
+]
 
 [tool.ruff]
 line-length = 160
@@ -15,7 +25,6 @@ extend-select = [
     "A",    # https://docs.astral.sh/ruff/rules/#flake8-builtins-a
     "B006", #https://docs.astral.sh/ruff/rules/mutable-argument-default/
     "I",    #https://docs.astral.sh/ruff/rules/#isort-i
-    "INP",  #https://docs.astral.sh/ruff/rules/#flake8-no-pep420-inp
     "UP",   #https://docs.astral.sh/ruff/rules/#pyupgrade-up
 ]
 ignore = [
@@ -24,4 +33,7 @@ ignore = [
 ]
 
 [tool.uv]
-package = false
+package = true
+
+[tool.setuptools.packages.find]
+include = ["api", "api.*"]
