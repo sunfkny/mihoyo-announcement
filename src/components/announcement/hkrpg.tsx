@@ -13,8 +13,8 @@ export async function HkrpgAnnouncement() {
     <div>
       {data.data.progress.percent && (
         <div className="my-4">
-          <Progress className="h-2" value={0} />
-          <span>{data.data.progress.text || "获取版本信息失败"}</span>
+          <Progress className="h-2" value={data.data.progress.percent * 100} />
+          <span>{data.data.progress.text}</span>
         </div>
       )}
       {!data.data.progress.percent && (
