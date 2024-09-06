@@ -33,7 +33,4 @@ ignore = [
 ]
 
 [tool.uv]
-package = true
-
-[tool.setuptools.packages.find]
-include = ["api", "api.*"]
+package = false
