@@ -4,8 +4,8 @@ import { HkrpgAnnouncement } from "./hkrpg";
 import { NapAnnouncement } from "./nap";
 
 export {
-    Bh3Announcement,
-    Hk4eAnnouncement,
-    HkrpgAnnouncement,
-    NapAnnouncement,
+  Bh3Announcement,
+  Hk4eAnnouncement,
+  HkrpgAnnouncement,
+  NapAnnouncement,
 };

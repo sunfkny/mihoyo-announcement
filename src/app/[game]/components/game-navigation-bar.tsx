@@ -39,7 +39,7 @@ const tabs: {
   },
 ];
 
-export function getAnnouncementComponent(game: Game|string) {
+export function getAnnouncementComponent(game: Game | string) {
   const tab = tabs.find((t) => t.key === game);
   if (!tab) {
     return null;

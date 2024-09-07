@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import {
   Game,
   GameNavigationBar,
-  isGame,
   getAnnouncementComponent,
 } from "./components/game-navigation-bar";
 import AnnouncementSkeleton from "./components/announcement-skeleton";

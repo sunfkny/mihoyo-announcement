@@ -1,30 +1,26 @@
-import { Api } from "@/api";
 import { Progress } from "@/components/ui/progress";
-import { headers } from "next/headers";
+import { getHk4eInfo } from "@/service/hk4e";
 
 export const revalidate = 60;
 
 export async function Hk4eAnnouncement() {
-  const host = headers().get("host") || "localhost:8000";
-  const scheme = headers().get("x-forwarded-proto") || "https";
-  const api = new Api({ baseUrl: `${scheme}://${host}/` });
-  const data = await api.api.apiHk4EApiHk4EGet();
+  const data = await getHk4eInfo();
   return (
     <div>
-      {data.data.progress.percent && (
+      {data.progress.percent && (
         <div className="my-4">
-          <Progress className="h-2" value={data.data.progress.percent * 100} />
-          <span>{data.data.progress.text}</span>
+          <Progress className="h-2" value={data.progress.percent * 100} />
+          <span>{data.progress.text}</span>
         </div>
       )}
-      {!data.data.progress.percent && (
+      {!data.progress.percent && (
         <div className="my-4">
           <Progress className="h-2" value={0} />
-          <span>{data.data.progress.text || "获取版本信息失败"}</span>
+          <span>{data.progress.text || "获取版本信息失败"}</span>
         </div>
       )}
 
-      {data.data.gacha_info.map((item) => (
+      {data.gacha_info.map((item) => (
         <div key={item.ann_id}>
           <img src={item.image} alt={item.title} />
           <p>{item.title}</p>
