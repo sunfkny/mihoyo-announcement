@@ -1,5 +1,4 @@
-import dayjs from "dayjs";
-import { getTimeHumaize } from "./utils";
+import { getTime, getTimeHumaize } from "./utils";
 
 interface Hk4eGachaInfo {
   ann_id: number;
@@ -200,9 +199,9 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
   const gachaInfo: Hk4eGachaInfo[] = [];
 
   if (versionInfo) {
-    const startTime = dayjs(versionInfo.start_time);
-    const endTime = dayjs(versionInfo.end_time);
-    const currentTime = dayjs();
+    const startTime = getTime(versionInfo.start_time);
+    const endTime = getTime(versionInfo.end_time);
+    const currentTime = getTime();
     if (startTime.isBefore(currentTime) && endTime.isAfter(currentTime)) {
       progressPercent = currentTime.diff(startTime) / endTime.diff(startTime);
       const durationString = getTimeHumaize(endTime);
@@ -220,15 +219,15 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
     const groups = Array.from(t || []).slice(1) || [];
     if (groups[0] && groups[2]) {
       start_time = groups[0];
-      const end_dayjs = dayjs(groups[2]);
-      end_time = `${end_dayjs.format("YYYY-MM-DD HH:mm:ss")} （${getTimeHumaize(end_dayjs)}）`;
+      const end = getTime(groups[2]);
+      end_time = `${end.format("YYYY-MM-DD HH:mm:ss")} （${getTimeHumaize(end)}）`;
     }
 
     if (groups[1] && groups[2]) {
-      const start_dayjs = dayjs(groups[1]);
-      const end_dayjs = dayjs(groups[2]);
-      start_time = `${start_dayjs.format("YYYY-MM-DD HH:mm:ss")} （${getTimeHumaize(start_dayjs)}）`;
-      end_time = `${end_dayjs.format("YYYY-MM-DD HH:mm:ss")} （${getTimeHumaize(end_dayjs)}）`;
+      const start = getTime(groups[1]);
+      const end = getTime(groups[2]);
+      start_time = `${start.format("YYYY-MM-DD HH:mm:ss")} （${getTimeHumaize(start)}）`;
+      end_time = `${end.format("YYYY-MM-DD HH:mm:ss")} （${getTimeHumaize(end)}）`;
     }
 
     gachaInfo.push({

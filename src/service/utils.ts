@@ -1,12 +1,16 @@
 import dayjs from "dayjs";
 import { Temporal } from "temporal-polyfill";
 
+const TZ = "Asia/Shanghai";
+process.env.TZ = TZ;
+
+export function getTime(time?: string): dayjs.Dayjs {
+  return dayjs(time);
+}
+
 export function getTimeHumaize(time: dayjs.Dayjs | Date) {
   const endTimeNanosecond = BigInt(time.valueOf()) * BigInt(1000000);
-  const endTimeTemporal = new Temporal.ZonedDateTime(
-    endTimeNanosecond,
-    process.env.TZ || "Asia/Shanghai",
-  );
+  const endTimeTemporal = new Temporal.ZonedDateTime(endTimeNanosecond, TZ);
   const nowTemporal = Temporal.Now.zonedDateTimeISO();
   // 现在减去结束时间
   const duration = nowTemporal

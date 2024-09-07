@@ -1,6 +1,5 @@
-import dayjs from "dayjs";
 import { JSDOM } from "jsdom";
-import { getTimeHumaize } from "./utils";
+import { getTime, getTimeHumaize } from "./utils";
 
 interface Bh3GachaInfo {
   ann_id: number;
@@ -198,9 +197,9 @@ export async function getBh3Info(): Promise<Bh3Response> {
   const gachaInfo: Bh3GachaInfo[] = [];
 
   if (versionInfo) {
-    const startTime = dayjs(versionInfo.start_time);
-    const endTime = dayjs(versionInfo.end_time);
-    const currentTime = dayjs();
+    const startTime = getTime(versionInfo.start_time);
+    const endTime = getTime(versionInfo.end_time);
+    const currentTime = getTime();
     if (startTime.isBefore(currentTime) && endTime.isAfter(currentTime)) {
       progressPercent = currentTime.diff(startTime) / endTime.diff(startTime);
       const durationString = getTimeHumaize(endTime);
