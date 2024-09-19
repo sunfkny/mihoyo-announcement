@@ -101,7 +101,7 @@ async function getAnnList(): Promise<AnnListResponse> {
         platform: "pc",
         region: "cn_gf01",
         uid: "100000000",
-      }).toString(),
+      }).toString()
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann list ${response.status}`);
@@ -110,14 +110,14 @@ async function getAnnList(): Promise<AnnListResponse> {
     response.headers.get("Content-Type")?.includes("application/json") === false
   ) {
     throw new Error(
-      `Fail to get ann list ${response.headers.get("Content-Type")}`,
+      `Fail to get ann list ${response.headers.get("Content-Type")}`
     );
   }
   return await response.json();
 }
 
 function getVersionInfoFromAnnList(
-  annList: Awaited<ReturnType<typeof getAnnList>>,
+  annList: Awaited<ReturnType<typeof getAnnList>>
 ):
   | {
       start_time: string;
@@ -152,7 +152,7 @@ async function getAnnContent(): Promise<AnnContentResponse> {
         platform: "pc",
         region: "cn_gf01",
         uid: "100000000",
-      }).toString(),
+      }).toString()
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann content ${response.status}`);
@@ -161,14 +161,14 @@ async function getAnnContent(): Promise<AnnContentResponse> {
     response.headers.get("Content-Type")?.includes("application/json") === false
   ) {
     throw new Error(
-      `Fail to get ann list ${response.headers.get("Content-Type")}`,
+      `Fail to get ann list ${response.headers.get("Content-Type")}`
     );
   }
   return await response.json();
 }
 
 function getGachaInfoFromAnnContent(
-  annContent: Awaited<ReturnType<typeof getAnnContent>>,
+  annContent: Awaited<ReturnType<typeof getAnnContent>>
 ): {
   content: string;
   ann_id: number;
@@ -214,7 +214,7 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
     let end_time: string = "";
     const t =
       /(?:([0-9]+\.[0-9]版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)/.exec(
-        i.content,
+        i.content
       );
     const groups = Array.from(t || []).slice(1) || [];
     if (groups[0] && groups[2]) {

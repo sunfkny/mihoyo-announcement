@@ -100,7 +100,7 @@ async function getAnnList(): Promise<AnnListResponse> {
         level: "40",
         channel_id: "1",
         uid: "10000000",
-      }).toString(),
+      }).toString()
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann list ${response.status}`);
@@ -109,14 +109,14 @@ async function getAnnList(): Promise<AnnListResponse> {
     response.headers.get("Content-Type")?.includes("application/json") === false
   ) {
     throw new Error(
-      `Fail to get ann list ${response.headers.get("Content-Type")}`,
+      `Fail to get ann list ${response.headers.get("Content-Type")}`
     );
   }
   return await response.json();
 }
 
 function getVersionInfoFromAnnList(
-  annList: Awaited<ReturnType<typeof getAnnList>>,
+  annList: Awaited<ReturnType<typeof getAnnList>>
 ):
   | {
       start_time: string;
@@ -145,7 +145,7 @@ async function getAnnContent(): Promise<AnnContentResponse> {
         level: "40",
         channel_id: "1",
         uid: "10000000",
-      }).toString(),
+      }).toString()
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann content ${response.status}`);
@@ -154,14 +154,14 @@ async function getAnnContent(): Promise<AnnContentResponse> {
     response.headers.get("Content-Type")?.includes("application/json") === false
   ) {
     throw new Error(
-      `Fail to get ann list ${response.headers.get("Content-Type")}`,
+      `Fail to get ann list ${response.headers.get("Content-Type")}`
     );
   }
   return await response.json();
 }
 
 function getGachaInfoFromAnnContent(
-  annContent: Awaited<ReturnType<typeof getAnnContent>>,
+  annContent: Awaited<ReturnType<typeof getAnnContent>>
 ): {
   content: string;
   ann_id: number;
@@ -199,7 +199,7 @@ export async function getNapInfo(): Promise<NapResponse> {
       progressPercent = currentTime.diff(startTime) / endTime.diff(startTime);
       const durationString = getTimeHumaize(endTime);
       progressText = `${startTime.format(
-        "YYYY-MM-DD HH:mm:ss",
+        "YYYY-MM-DD HH:mm:ss"
       )} ~ ${endTime.format("YYYY-MM-DD HH:mm:ss")} （${durationString}结束）`;
     }
   }
@@ -209,14 +209,14 @@ export async function getNapInfo(): Promise<NapResponse> {
     let end_time: string = "";
     const t =
       /(?:([0-9]+\.[0-9]版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)/.exec(
-        i.content,
+        i.content
       );
     const groups = Array.from(t || []).slice(1) || [];
     if (groups[0] && groups[2]) {
       start_time = groups[0];
       const end = getTime(groups[2]);
       end_time = `${end.format("YYYY-MM-DD HH:mm:ss")} （${getTimeHumaize(
-        end,
+        end
       )}）`;
     }
 
@@ -224,10 +224,10 @@ export async function getNapInfo(): Promise<NapResponse> {
       const start = getTime(groups[1]);
       const end = getTime(groups[2]);
       start_time = `${start.format(
-        "YYYY-MM-DD HH:mm:ss",
+        "YYYY-MM-DD HH:mm:ss"
       )} （${getTimeHumaize(start)}）`;
       end_time = `${end.format("YYYY-MM-DD HH:mm:ss")} （${getTimeHumaize(
-        end,
+        end
       )}）`;
     }
 
