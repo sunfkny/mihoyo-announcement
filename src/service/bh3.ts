@@ -100,7 +100,7 @@ async function getAnnList(): Promise<AnnListResponse> {
         platform: "pc",
         region: "bb01",
         uid: "100000000",
-      }).toString(),
+      }).toString()
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann list ${response.status}`);
@@ -109,14 +109,14 @@ async function getAnnList(): Promise<AnnListResponse> {
     response.headers.get("Content-Type")?.includes("application/json") === false
   ) {
     throw new Error(
-      `Fail to get ann list ${response.headers.get("Content-Type")}`,
+      `Fail to get ann list ${response.headers.get("Content-Type")}`
     );
   }
   return await response.json();
 }
 
 function getVersionInfoFromAnnList(
-  annList: Awaited<ReturnType<typeof getAnnList>>,
+  annList: Awaited<ReturnType<typeof getAnnList>>
 ):
   | {
       start_time: string;
@@ -149,7 +149,7 @@ async function getAnnContent(): Promise<AnnContentResponse> {
         platform: "pc",
         region: "bb01",
         uid: "100000000",
-      }).toString(),
+      }).toString()
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann content ${response.status}`);
@@ -158,14 +158,14 @@ async function getAnnContent(): Promise<AnnContentResponse> {
     response.headers.get("Content-Type")?.includes("application/json") === false
   ) {
     throw new Error(
-      `Fail to get ann list ${response.headers.get("Content-Type")}`,
+      `Fail to get ann list ${response.headers.get("Content-Type")}`
     );
   }
   return await response.json();
 }
 
 function getGachaInfoFromAnnContent(
-  annContent: Awaited<ReturnType<typeof getAnnContent>>,
+  annContent: Awaited<ReturnType<typeof getAnnContent>>
 ): {
   content: string;
   ann_id: number;
@@ -174,7 +174,7 @@ function getGachaInfoFromAnnContent(
 }[] {
   return annContent.data.list
     .filter(
-      (i) => i.subtitle.includes("补给") || i.content.includes("补给限时开启"),
+      (i) => i.subtitle.includes("补给") || i.content.includes("补给限时开启")
     )
     .map((i) => {
       return {
@@ -215,25 +215,30 @@ export async function getBh3Info(): Promise<Bh3Response> {
 
     const info_dom = new JSDOM();
     const open_time_header = nodes.find(
-      (node) => node.textContent === "开放时间",
+      (node) => node.textContent === "开放时间"
     );
     if (open_time_header && open_time_header.nextSibling) {
       info_dom.window.document.body.appendChild(open_time_header.nextSibling);
     }
 
     const gacha_info_header = nodes.find(
-      (node) => node.textContent === "补给信息",
+      (node) => node.textContent === "补给信息"
     );
     let gacha_info_header_next = gacha_info_header?.nextSibling;
-    if (
-      gacha_info_header_next?.textContent ===
-      "活动期间内，以下所有装备均有一定概率获取；指定装备UP时间内，该装备的获取概率提升！"
-    ) {
-      gacha_info_header_next = gacha_info_header_next?.nextSibling;
+    let gacha_info_header_next_text = gacha_info_header_next?.textContent || "";
+    let is_as_follows =
+      gacha_info_header_next_text.includes("如下") ||
+      gacha_info_header_next_text.includes("以下");
+
+    let elements = [gacha_info_header_next];
+    if (is_as_follows) {
+      elements.push(gacha_info_header_next?.nextSibling);
     }
-    if (gacha_info_header_next) {
-      info_dom.window.document.body.appendChild(gacha_info_header_next);
-    }
+    elements.forEach((element) => {
+      if (element) {
+        info_dom.window.document.body.appendChild(element);
+      }
+    });
 
     if (info_dom.window.document.body.innerHTML) {
       infoHtml = info_dom.window.document.body.innerHTML;

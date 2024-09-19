@@ -84,16 +84,25 @@ async def get_bh3_gacha_info():
 
     for i in ann_content.get_gacha_info():
         content_soup = bs4.BeautifulSoup(i.content, "html.parser")
-        info_header_text = content_soup.find(string=["开放时间", "补给信息"])
-        info_header = info_header_text.parent if info_header_text else None
-        info_element = info_header.find_next_sibling() if info_header else None
-        if info_element and "活动期间内，以下所有装备均有一定概率获取；指定装备UP时间内，该装备的获取概率提升！" == info_element.text:
-            info_element = info_element.find_next_sibling()
+        elements = []
+        open_time_header = content_soup.find(string=["开放时间"])
+        logger.info(f"open_time_header {open_time_header}")
+        if open_time_header and open_time_header.parent:
+            elements.append(open_time_header.parent.find_next_sibling())
 
+        info_header = content_soup.find(string=["补给信息"])
+        if info_header and info_header.parent:
+            info_header_next = info_header.parent.find_next_sibling()
+            elements.append(info_header_next)
+
+            if info_header_next and any(i in info_header_next.text for i in ["如下", "以下"]):
+                elements.append(info_header_next.find_next_sibling())
+
+        print(elements)
+        elements = [i for i in elements if i]
         info_html = None
-
-        if info_element is not None:
-            info_html = str(info_element)
+        if elements:
+            info_html = "".join([str(i) for i in elements])
 
         gacha_info.append(
             Bh3GachaInfo(
