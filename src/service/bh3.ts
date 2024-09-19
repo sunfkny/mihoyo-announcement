@@ -127,7 +127,8 @@ function getVersionInfoFromAnnList(
     for (const i of lst.list) {
       if (
         i.title.includes("游戏更新内容问题修复及优化说明") ||
-        i.subtitle.includes("游戏更新内容公告")
+        i.subtitle.includes("游戏更新内容公告") ||
+        i.subtitle.includes("版本更新公告")
       ) {
         return i;
       }
