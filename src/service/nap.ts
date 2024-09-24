@@ -125,7 +125,10 @@ function getVersionInfoFromAnnList(
   | undefined {
   for (const lst of annList.data.list) {
     for (const i of lst.list) {
-      if (i.title.includes("已知问题及游戏优化说明")) {
+      if (
+        i.title.includes("已知问题及游戏优化说明") ||
+        i.subtitle.includes("版本更新说明")
+      ) {
         return i;
       }
     }
