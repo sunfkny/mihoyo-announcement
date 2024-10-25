@@ -12,7 +12,7 @@ from api.utils.timezone import get_tzinfo
 
 async def get_ann_list():
     response_data = await request_async(
-        "https://hkrpg-api.mihoyo.com/common/hkrpg_cn/announcement/api/getAnnList",
+        "https://hkrpg-ann-api.mihoyo.com/common/hkrpg_cn/announcement/api/getAnnList",
         {
             "game": "hkrpg",
             "game_biz": "hkrpg_cn",
@@ -31,7 +31,7 @@ async def get_ann_list():
 
 async def get_ann_content():
     response_data = await request_async(
-        "https://hkrpg-api.mihoyo.com/common/hkrpg_cn/announcement/api/getAnnContent",
+        "https://hkrpg-ann-api.mihoyo.com/common/hkrpg_cn/announcement/api/getAnnContent",
         {
             "game": "hkrpg",
             "game_biz": "hkrpg_cn",

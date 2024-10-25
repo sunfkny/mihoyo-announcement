@@ -106,7 +106,7 @@ interface AnnListResponse {
 
 async function getAnnList(): Promise<AnnListResponse> {
   const response = await fetch(
-    "https://hkrpg-api.mihoyo.com/common/hkrpg_cn/announcement/api/getAnnList?" +
+    "https://hkrpg-ann-api.mihoyo.com/common/hkrpg_cn/announcement/api/getAnnList?" +
       new URLSearchParams({
         game: "hkrpg",
         game_biz: "hkrpg_cn",
@@ -156,7 +156,7 @@ function getVersionInfoFromAnnList(
 
 async function getAnnContent(): Promise<AnnContentResponse> {
   const response = await fetch(
-    "https://hkrpg-api.mihoyo.com/common/hkrpg_cn/announcement/api/getAnnContent?" +
+    "https://hkrpg-ann-api.mihoyo.com/common/hkrpg_cn/announcement/api/getAnnContent?" +
       new URLSearchParams({
         game: "hkrpg",
         game_biz: "hkrpg_cn",
