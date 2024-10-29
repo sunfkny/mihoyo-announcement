@@ -8,18 +8,21 @@ import AnnouncementSkeleton from "./components/announcement-skeleton";
 
 export const revalidate = 60;
 
-export default function Home({ params }: { params: { game: Game | string } }) {
-  const Announcement = getAnnouncementComponent(params.game);
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ game: Game | string }>;
+}) {
+  const { game } = await params;
+  const Announcement = getAnnouncementComponent(game);
 
   return (
     <main className="flex min-h-screen flex-col items-center p-4">
-      <GameNavigationBar game={params.game} />
+      <GameNavigationBar game={game} />
       <div className="max-w-[768px] w-full flex justify-center">
         <Suspense fallback={<AnnouncementSkeleton />}>
           {Announcement && <Announcement />}
-          {!Announcement && (
-            <div className="my-4">Invalid game: {params.game}</div>
-          )}
+          {!Announcement && <div className="my-4">Invalid game: {game}</div>}
         </Suspense>
       </div>
     </main>
