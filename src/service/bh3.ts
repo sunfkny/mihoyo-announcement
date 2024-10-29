@@ -174,7 +174,9 @@ function getGachaInfoFromAnnContent(
 }[] {
   return annContent.data.list
     .filter(
-      (i) => i.subtitle.includes("补给") || i.content.includes("补给限时开启")
+      (i) =>
+        i.subtitle.includes("补给") &&
+        ["补给信息", "补给规则"].some((j) => i.content.includes(j))
     )
     .map((i) => {
       return {
