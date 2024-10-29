@@ -1,8 +1,6 @@
 import { Progress } from "@/components/ui/progress";
 import { getHkrpgInfo } from "@/service/hkrpg";
 
-export const revalidate = 60;
-
 export async function HkrpgAnnouncement() {
   const data = await getHkrpgInfo();
   return (

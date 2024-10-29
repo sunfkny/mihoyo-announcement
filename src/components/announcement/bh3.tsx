@@ -1,8 +1,6 @@
 import { Progress } from "@/components/ui/progress";
 import { getBh3Info } from "@/service/bh3";
 
-export const revalidate = 60;
-
 export async function Bh3Announcement() {
   const data = await getBh3Info();
   return (

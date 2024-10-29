@@ -1,8 +1,6 @@
 import { Progress } from "@/components/ui/progress";
 import { getHk4eInfo } from "@/service/hk4e";
 
-export const revalidate = 60;
-
 export async function Hk4eAnnouncement() {
   const data = await getHk4eInfo();
   return (

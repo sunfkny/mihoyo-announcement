@@ -12,39 +12,19 @@ export type Game = (typeof games)[number];
 export function isGame(game: string): game is Game {
   return games.includes(game as Game);
 }
-const tabs: {
-  key: Game;
-  name: string;
-  component: () => Promise<JSX.Element>;
-}[] = [
+const tabsMap: Record<Game, { name: string; component: React.ComponentType }> =
   {
-    key: "bh3",
-    name: "崩坏3",
-    component: Bh3Announcement,
-  },
-  {
-    key: "hk4e",
-    name: "原神",
-    component: Hk4eAnnouncement,
-  },
-  {
-    key: "hkrpg",
-    name: "崩坏：星穹铁道",
-    component: HkrpgAnnouncement,
-  },
-  {
-    key: "nap",
-    name: "绝区零",
-    component: NapAnnouncement,
-  },
-];
-
-export function getAnnouncementComponent(game: Game | string) {
-  const tab = tabs.find((t) => t.key === game);
-  if (!tab) {
-    return null;
-  }
-  return tab.component;
+    bh3: { name: "崩坏3", component: Bh3Announcement },
+    hk4e: { name: "原神", component: Hk4eAnnouncement },
+    hkrpg: { name: "崩坏：星穹铁道", component: HkrpgAnnouncement },
+    nap: { name: "绝区零", component: NapAnnouncement },
+  };
+export const tabs = games.map((key) => {
+  const game = tabsMap[key];
+  return { key, name: game.name, component: game.component };
+});
+export function getAnnouncementComponent(game: Game): React.ComponentType {
+  return tabsMap[game].component;
 }
 
 export function GameNavigationBar(params: { game: Game | string }) {

@@ -1,6 +1,5 @@
 import { Progress } from "@/components/ui/progress";
 import { getNapInfo } from "@/service/nap";
-export const revalidate = 60;
 
 export async function NapAnnouncement() {
   const data = await getNapInfo();
