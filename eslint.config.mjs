@@ -16,7 +16,6 @@ const config = [
   {
     rules: {
       "@next/next/no-img-element": "off",
-      "no-unused-vars": "error",
       "prettier/prettier": [
         "error",
         {

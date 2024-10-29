@@ -1,4 +1,18 @@
-import { Game, GameNavigationBar } from "./components/game-navigation-bar";
+import { Game, getGameName, isGame } from "@/constants/game";
+import { GameNavigationBar } from "@/components/game-navigation-bar";
+import type { Metadata, ResolvingMetadata } from "next";
+export async function generateMetadata(
+  { params }: { params: Promise<{ game: Game | string }> },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { game } = await params;
+  if (isGame(game)) {
+    return {
+      title: getGameName(game),
+    };
+  }
+  return {};
+}
 
 export default async function AnnouncementLayout({
   children,

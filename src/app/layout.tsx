@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Mihoyo Announcement",
+  title: {
+    template: "%s公告",
+    default: "公告",
+  },
 };
 
 export default function RootLayout({

@@ -1,14 +1,14 @@
 import {
   Game,
-  games,
+  gameKeys,
   getAnnouncementComponent,
   isGame,
-} from "./components/game-navigation-bar";
+} from "@/constants/game";
 
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  return games.map((game) => {
+  return gameKeys.map((game) => {
     return { game };
   });
 }
