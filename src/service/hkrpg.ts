@@ -217,7 +217,7 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
     const startTime = getTime(versionInfo.start_time);
     const endTime = getTime(versionInfo.end_time);
     const currentTime = getTime();
-    if (startTime.isBefore(currentTime) && endTime.isAfter(currentTime)) {
+    if (currentTime.isBetween(startTime, endTime)) {
       progressPercent = currentTime.diff(startTime) / endTime.diff(startTime);
       const durationString = getTimeHumaize(endTime);
       progressText = `${startTime.format("YYYY-MM-DD HH:mm:ss")} ~ ${endTime.format("YYYY-MM-DD HH:mm:ss")} （${durationString}结束）`;

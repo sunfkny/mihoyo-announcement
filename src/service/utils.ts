@@ -1,23 +1,24 @@
-import dayjs from "dayjs";
-import { Temporal } from "temporal-polyfill";
+import moment from "moment";
 
 const TZ = "Asia/Shanghai";
 process.env.TZ = TZ;
 
-export function getTime(time?: string): dayjs.Dayjs {
-  return dayjs(time);
+export function getTime(time?: string): moment.Moment {
+  if (!time) {
+    return moment();
+  }
+  return moment(time, "YYYY/MM/DD hh:mm");
 }
 
-export function getTimeHumaize(time: dayjs.Dayjs | Date) {
-  const endTimeNanosecond = BigInt(time.valueOf()) * BigInt(1000000);
-  const endTimeTemporal = new Temporal.ZonedDateTime(endTimeNanosecond, TZ);
-  const nowTemporal = Temporal.Now.zonedDateTimeISO();
-  // 现在减去结束时间
-  const duration = nowTemporal
-    .until(endTimeTemporal)
-    .round({ largestUnit: "days" });
-  // 结果为正数表示结束时间在未来，负数表示结束时间在过去
+export function getTimeHumaize(time: moment.Moment) {
+  const now = moment();
+  const duration = {
+    sign: now.isAfter(time) ? -1 : 1,
+    days: Math.abs(now.diff(time, "days")),
+    hours: Math.abs(now.diff(time, "hours") % 24),
+    minutes: Math.abs(now.diff(time, "minutes") % 60),
+  };
   const durationSuffix = duration.sign === 1 ? "后" : "前";
-  const durationString = `${Math.abs(duration.days)}天${Math.abs(duration.hours)}小时${Math.abs(duration.minutes)}分钟${durationSuffix}`;
+  const durationString = `${duration.days}天${duration.hours}小时${duration.minutes}分钟${durationSuffix}`;
   return durationString;
 }

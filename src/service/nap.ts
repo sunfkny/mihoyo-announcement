@@ -198,7 +198,7 @@ export async function getNapInfo(): Promise<NapResponse> {
     const startTime = getTime(versionInfo.start_time);
     const endTime = getTime(versionInfo.end_time);
     const currentTime = getTime();
-    if (startTime.isBefore(currentTime) && endTime.isAfter(currentTime)) {
+    if (currentTime.isBetween(startTime, endTime)) {
       progressPercent = currentTime.diff(startTime) / endTime.diff(startTime);
       const durationString = getTimeHumaize(endTime);
       progressText = `${startTime.format(
