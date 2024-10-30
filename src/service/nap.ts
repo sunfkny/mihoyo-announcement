@@ -89,7 +89,7 @@ interface AnnListResponse {
 
 async function getAnnList(): Promise<AnnListResponse> {
   const response = await fetch(
-    "https://announcement-static.mihoyo.com/common/nap_cn/announcement/api/getAnnList?" +
+    "https://announcement-api.mihoyo.com/common/nap_cn/announcement/api/getAnnList?" +
       new URLSearchParams({
         game: "nap",
         game_biz: "nap_cn",
@@ -137,7 +137,7 @@ function getVersionInfoFromAnnList(
 
 async function getAnnContent(): Promise<AnnContentResponse> {
   const response = await fetch(
-    "https://announcement-static.mihoyo.com/common/nap_cn/announcement/api/getAnnContent?" +
+    "https://announcement-api.mihoyo.com/common/nap_cn/announcement/api/getAnnContent?" +
       new URLSearchParams({
         game: "nap",
         game_biz: "nap_cn",

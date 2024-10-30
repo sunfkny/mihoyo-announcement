@@ -89,7 +89,7 @@ interface AnnListResponse {
 
 async function getAnnList(): Promise<AnnListResponse> {
   const response = await fetch(
-    "https://hk4e-api.mihoyo.com/common/hk4e_cn/announcement/api/getAnnList?" +
+    "https://hk4e-ann-api.mihoyo.com/common/hk4e_cn/announcement/api/getAnnList?" +
       new URLSearchParams({
         game: "hk4e",
         game_biz: "hk4e_cn",
@@ -142,7 +142,7 @@ function getVersionInfoFromAnnList(
 
 async function getAnnContent(): Promise<AnnContentResponse> {
   const response = await fetch(
-    "https://hk4e-api.mihoyo.com/common/hk4e_cn/announcement/api/getAnnContent?" +
+    "https://hk4e-ann-api.mihoyo.com/common/hk4e_cn/announcement/api/getAnnContent?" +
       new URLSearchParams({
         game: "hk4e",
         game_biz: "hk4e_cn",

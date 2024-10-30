@@ -138,7 +138,7 @@ function getVersionInfoFromAnnList(
 
 async function getAnnContent(): Promise<AnnContentResponse> {
   const response = await fetch(
-    "https://ann-static.mihoyo.com/common/bh3_cn/announcement/api/getAnnContent?" +
+    "https://ann-api.mihoyo.com/common/bh3_cn/announcement/api/getAnnContent?" +
       new URLSearchParams({
         game: "bh3",
         game_biz: "bh3_cn",
